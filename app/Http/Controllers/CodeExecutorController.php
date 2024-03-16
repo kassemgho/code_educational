@@ -7,31 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CodeExecutorController extends Controller
 {
-    /*
-    {
-	"problem_statment": "Dynamic problem", 
-	"teacher_code_solve": "include<iostream>",
-	"language_type": 1,
-	"test_cases": [
-		"1",
-		"2",
-		"3",
-		"4"
-	],	
-}
-    */ 
-    public function excuteTeacherCode(Request $request) {
-        $request->validate([
-            'problem_statment' => 'required',
-            'teacher_solve_code' => 'required',
-            'language' => 'required',
-            'test_cases' => 'required|array' 
-        ]);
-        foreach($request->test_cases as $test_case) {
-            echo $test_case;
-        }
-    }
-
     public static function runCppCode(Request $request)
     {
         // Validate the request, ensuring it contains the 'cpp_code' parameter and 'input' parameter.
@@ -41,7 +16,7 @@ class CodeExecutorController extends Controller
         ]);
         // Receive the C++ code and input from the request.
         $cppCode = $request->input('teacher_solve_code');
-        $input = $request->input('input', '1 2'); // Default to an empty string if 'input' is not provided.
+        $input = $request->input('input'); // Default to an empty string if 'input' is not provided.
 
         // Create a temporary input file and write the input data to it.
         $inputFilePath = tempnam(sys_get_temp_dir(), 'cpp_input_');
@@ -71,7 +46,7 @@ class CodeExecutorController extends Controller
         return response()->json(['output' => implode(PHP_EOL, $output)]);
     }
 
- public function runJavaCode(Request $request)
+    public static function runJavaCode(Request $request)
     {
         // Validate the request, ensuring it contains the 'java_code' parameter and 'input' parameter.
         $request->validate([
@@ -81,8 +56,7 @@ class CodeExecutorController extends Controller
         $salt = random_int(0,1000000) ;
         // Receive the Java code and input from the request.
         $javaCode = $request->input('teacher_solve_code');
-        $input = $request->input('input' , 'Mouaz abbas  aksjndkhb kahsd ahd '); // Default to an empty string if 'input' is not provided.
-
+        $input = $request->input('input'); // Default to an empty string if 'input' is not provided.
         // Create a temporary input file and write the input data to it.
         $inputFilePath = tempnam(sys_get_temp_dir(), 'java_input_');
         file_put_contents($inputFilePath, $input);
