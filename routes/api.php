@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassclcearController;
+use App\Http\Controllers\CodeExecutorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +20,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-//admin
+
+Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+
+Route::post('test' , [CodeExecutorController::class, 'runJavaCode']);
 Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','adminstrator']] , function(){
-    Route::get('test' , function(){
-       // return auth()->user()->with('adminstrator')->first();
-        return ClassclcearController::kassem()  ;
-    });
+
 });
+    
 
 Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']] , function(){
     
@@ -34,5 +36,3 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
     
 });
-
-Route::get('tttt' ,[ClassclcearController::class , 'kassem']) ;

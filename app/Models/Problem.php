@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Problem extends Model
 {
     use HasFactory;
-    protected $fillable = ['teacher_id' , 'name' , 'description' , 'teacher_code_solve'] ;
+    protected $fillable = [
+        'teacher_id' , 'name' , 'description' , 'teacher_code_solve', 'active'
+    ];
 
     public function teacher(): BelongsTo
     {

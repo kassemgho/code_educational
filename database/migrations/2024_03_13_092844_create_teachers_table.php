@@ -12,7 +12,7 @@ class CreateTeachersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('phone_number');
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable();
             $table->timestamps();
         });
     }

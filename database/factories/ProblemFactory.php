@@ -17,10 +17,18 @@ class ProblemFactory extends Factory
      */
     public function definition(): array
     {
+        $code = '#include<iostream>
+                using namespace std ;
+                int main(){
+                    int x ; 
+                    cin>>x ;
+                    cout << x ;
+                    return 0 ;
+                }';
         return [
             'name' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'teacher_code_solve' => $this->faker->text,
+            'teacher_code_solve' => $code ,
             'teacher_id' => Teacher::inRandomOrder()->value('id'),
         ];
     }

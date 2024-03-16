@@ -13,6 +13,7 @@ class CreateProblemsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('teacher_code_solve');
+            $table->boolean('active')->default(0);
             $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
             $table->timestamps();
         });

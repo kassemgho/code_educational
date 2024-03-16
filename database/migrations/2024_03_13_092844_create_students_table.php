@@ -11,8 +11,8 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('phone_number');
-            $table->date('date_of_birth');
-            $table->integer('university_id');
+            $table->date('date_of_birth')->nullable();
+            $table->integer('university_id')->nullable();
             $table->timestamps();
         });
     }

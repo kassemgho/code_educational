@@ -18,8 +18,7 @@ class TestCaseFactory extends Factory
     public function definition(): array
     {
         return [
-            'input' => $this->faker->text,
-            'output' => $this->faker->text,
+            'input' => rand(0,1000),
             'problem_id' => Problem::inRandomOrder()->value('id'),
         ];
     }

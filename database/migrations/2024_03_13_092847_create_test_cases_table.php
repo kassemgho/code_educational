@@ -10,7 +10,7 @@ class CreateTestCasesTable extends Migration
         Schema::create('test_cases', function (Blueprint $table) {
             $table->id();
             $table->string('input');
-            $table->string('output');
+            $table->string('output')->nullable();
             $table->foreignId('problem_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
