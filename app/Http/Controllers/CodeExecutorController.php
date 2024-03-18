@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CodeExecutorController extends Controller
 {
-    public static function runCppCode(Request $request)
+    public static function runCppCode(array $param)
     {
-        // Validate the request, ensuring it contains the 'cpp_code' parameter and 'input' parameter.
-        $request->validate([
-            'teacher_solve_code' => 'required|string',
-            'input' => 'string', // Input parameter is optional
-        ]);
+        
         // Receive the C++ code and input from the request.
-        $cppCode = $request->input('teacher_solve_code');
-        $input = $request->input('input'); // Default to an empty string if 'input' is not provided.
+        $cppCode = $param['teacher_code_solve'];
+        $input = $param['input']; // Default to an empty string if 'input' is not provided.
 
         // Create a temporary input file and write the input data to it.
         $inputFilePath = tempnam(sys_get_temp_dir(), 'cpp_input_');
@@ -31,32 +26,33 @@ class CodeExecutorController extends Controller
 
         if ($returnCode !== 0) {
             // Compilation or execution error occurred.
+                // Clean up temporary files.
             $errorOutput = file_get_contents($errorFilePath);
+            unlink($inputFilePath);
+            unlink($errorFilePath);
+            unlink("/tmp/cpp_code_$salt.cpp");
+            // Return the output as a response.
 
             // Return the error message as a response.
-            return response()->json(['error' => $errorOutput], 400);
+            return ['error' => $errorOutput];
         }
 
         // Clean up temporary files.
         unlink($inputFilePath);
-        unlink($errorFilePath);
+        // unlink($errorFilePath);
         unlink("/tmp/cpp_code_$salt.cpp");
         unlink("/tmp/cpp_code_output_$salt");
         // Return the output as a response.
-        return response()->json(['output' => implode(PHP_EOL, $output)]);
+        return ['output' => implode(PHP_EOL, $output)];
     }
 
-    public static function runJavaCode(Request $request)
+    public static function runJavaCode(array $param)
     {
-        // Validate the request, ensuring it contains the 'java_code' parameter and 'input' parameter.
-        $request->validate([
-            'teacher_solve_code' => 'required|string',
-            'input' => 'string', // Input parameter is optional
-        ]);
+      
         $salt = random_int(0,1000000) ;
         // Receive the Java code and input from the request.
-        $javaCode = $request->input('teacher_solve_code');
-        $input = $request->input('input'); // Default to an empty string if 'input' is not provided.
+        $javaCode = $param['teacher_code_solve'];
+        $input = $param['input']; // Default to an empty string if 'input' is not provided.
         // Create a temporary input file and write the input data to it.
         $inputFilePath = tempnam(sys_get_temp_dir(), 'java_input_');
         file_put_contents($inputFilePath, $input);
@@ -75,7 +71,7 @@ class CodeExecutorController extends Controller
             $errorOutput = file_get_contents($errorFilePath);
 
             // Return the error message as a response.
-            return response()->json(['error' => $errorOutput], 400);
+            return ['error' => $errorOutput];
         }
         // Run the compiled Java code with input and capture the output.
         $executionCommand = "cd /tmp  && cat $inputFilePath | java Main" ;
@@ -89,7 +85,7 @@ class CodeExecutorController extends Controller
         unlink("/tmp/Main.class"); // Remove compiled .class file
 
         // Return the output as a response.
-        return response()->json(['output' => implode(PHP_EOL, $output)]);
+        return ['output' => implode(PHP_EOL, $output)];
     }
 
 

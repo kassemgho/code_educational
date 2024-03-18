@@ -14,7 +14,9 @@ class Problem extends Model
     protected $fillable = [
         'teacher_id' , 'name' , 'description' , 'teacher_code_solve', 'active'
     ];
-
+    protected $hidden = [
+        'teacher_code_solve'
+    ];
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class);

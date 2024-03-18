@@ -28,5 +28,8 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
-    
+    public function categories()
+    {
+        return $this->hasManyThrough(Category::class, SubjectTeacher::class, 'teacher_id', 'teacher_subject_id', 'id', 'id');
+    }
 }

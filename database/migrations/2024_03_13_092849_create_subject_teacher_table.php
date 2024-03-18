@@ -8,7 +8,7 @@ class CreateTeacherSubjectTable extends Migration
 {
     public function up()
     {
-        Schema::create('teacher_subject', function (Blueprint $table) {
+        Schema::create('subject_teacher', function (Blueprint $table) {
             $table->id();
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');

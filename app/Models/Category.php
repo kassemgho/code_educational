@@ -20,17 +20,15 @@ class Category extends Model
 
     public function teacherStudent(): BelongsTo
     {
-        return $this->belongsTo(TeacherSubject::class);
+        return $this->belongsTo(SubjectTeacher::class);
     }
     public function students(): HasMany
     {
         return $this->hasMany(Student::class);
     }
  
-    public function teacherSubject(): BelongsTo
+    public function subjectTeacher()
     {
-        return $this->belongsTo(TeacherSubject::class);
+        return $this->belongsTo(SubjectTeacher::class, 'teacher_subject_id', 'id');
     }
-
-    
 }
