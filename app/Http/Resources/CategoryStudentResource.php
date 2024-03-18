@@ -20,6 +20,7 @@ class CategoryStudentResource extends JsonResource
             'attendance_marks' => $this->pivot->attendance_marks,
             'assessment_marks' => $this->pivot->assessment_marks,
             'mark' => $this->exams[0]->pivot->mark,
+            'exam_id' => $this->exams[0]->id 
         ];
     }
 }

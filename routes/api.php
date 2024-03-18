@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Teacher\CategoryController;
+use App\Http\Controllers\Teacher\ExamController;
 use App\Http\Controllers\Teacher\ProblemController;
 use App\Http\Controllers\Teacher\TagController;
 use App\Models\Problem;
@@ -46,8 +47,12 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [CategoryController::class, 'index']);
         Route::get('/{category}' , [CategoryController::class , 'show']);
+        Route::post('/{category}' , [CategoryController::class , 'updateCategory']);
     });
-    
+    Route::group(['prefix' => 'exams'] , function(){
+        Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
+        Route::get('/{category}' , [CategoryController::class , 'show']);
+    });
 });
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
     
