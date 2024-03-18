@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Exam extends Model
 {
     use HasFactory;
-    protected $fillable = ['passwd' , 'adminstrator_id' , 'name' ,'time'] ;
+    protected $fillable = ['passwd' , 'adminstrator_id' , 'name' ,'time', 'subject_id'] ;
 
     public function qustions(): BelongsToMany
     {
@@ -20,7 +20,7 @@ class Exam extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class, 'exam_studentt');
     }
 
     public function admin(): BelongsTo
@@ -31,5 +31,9 @@ class Exam extends Model
     public function trueFalseQuestions(): HasMany
     {
         return $this->hasMany(TrueFalseQuestion::class);
+    }
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 }

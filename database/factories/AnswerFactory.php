@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\StudentExam;
+use App\Models\ExamStudent;
 use App\Models\TrueFalseQuestion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class AnswerFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_exam_id' => StudentExam::inRandomOrder()->value('id'),
+            'exam_student_id' => ExamStudent::inRandomOrder()->value('id'),
             'true_false_question_id' => TrueFalseQuestion::inRandomOrder()->value('id'),
             'answer' => $this->faker->text,
         ];

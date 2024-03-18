@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
             'role' => 'adminstrator'
         ]);
+        
         \App\Models\User::factory()->create();
         \App\Models\Student::factory(10)->create();
         \App\Models\Teacher::factory(10)->create();
@@ -30,10 +31,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\ProblemTag::factory(10)->create();
         \App\Models\SolveProblem::factory(10)->create();
         \App\Models\TestCase::factory(10)->create();
-        \App\Models\Exam::factory(10)->create();
         \App\Models\Subject::factory(10)->create();
-        \App\Models\TeacherSubject::factory(10)->create();
-        \App\Models\StudentExam::factory(10)->create();
+        \App\Models\Exam::factory(10)->create();
+        \App\Models\SubjectTeacher::factory(10)->create();
+        \App\Models\ExamStudent::factory(10)->create();
         \App\Models\Question::factory(10)->create();
         \App\Models\TrueFalseQuestion::factory(10)->create();
         \App\Models\Answer::factory(10)->create();

@@ -14,7 +14,7 @@ class Answer extends Model
     
     public function studentExam(): BelongsTo
     {
-        return $this->belongsTo(StudentExam::class);
+        return $this->belongsTo(ExamStudent::class);
     }
   
     public function trueFalseQuestion() : HasOne

@@ -13,6 +13,7 @@ class CreateExamsTable extends Migration
             $table->foreignId('administrator_id')->constrained('administrators')->onDelete('cascade');
             $table->string('name');
             $table->date('time');
+            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
             $table->timestamps();
         });
     }

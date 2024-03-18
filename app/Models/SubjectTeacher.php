@@ -17,6 +17,9 @@ class SubjectTeacher extends Model
         return $this->hasMany(Category::class);
     }
     public function teacher() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Teacher::class);
+    }
+    public function subject(){
+        return $this->belongsTo(Subject::class) ;
     }
 }

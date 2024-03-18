@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\TeacherSubject;
+use App\Models\SubjectTeacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'teacher_subject_id' => TeacherSubject::inRandomOrder()->value('id'),
+            'subject_teacher_id' => SubjectTeacher::inRandomOrder()->value('id'),
             'number_of_lessons' => $this->faker->numberBetween(1, 20),
             'number_of_ratings' => $this->faker->numberBetween(1, 100),
             'mark_of_commings' => $this->faker->randomFloat(2, 0, 10),

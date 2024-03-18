@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Subject extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'] ;
+    protected $fillable = ['name'];
 
     public function teachers(): BelongsToMany
     {
@@ -19,5 +19,12 @@ class Subject extends Model
     public function categories()
     {
         return $this->hasMany(Category::class, 'teacher_subject_id', 'id');
+    }
+    public function subjectTeachers(){
+        return $this->hasMany(SubjectTeacher::class) ;
+    }
+    public function exam()
+    {
+        return $this->hasOne(Exam::class);
     }
 }

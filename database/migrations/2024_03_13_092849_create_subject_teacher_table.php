@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTeacherSubjectTable extends Migration
+class CreateSubjectTeacherTable extends Migration
 {
     public function up()
     {

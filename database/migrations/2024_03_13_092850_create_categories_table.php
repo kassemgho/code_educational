@@ -11,7 +11,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('teacher_subject_id')->constrained('teacher_subject')->onDelete('cascade');
+            $table->foreignId('subject_teacher_id')->constrained('subject_teacher')->onDelete('cascade');
             $table->integer('number_of_lessons');
             $table->integer('number_of_ratings');
             $table->float('mark_of_commings');

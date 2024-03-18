@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'teacher_subject_id',
+        'subject_teacher_id',
         'number_of_lessons',
         'mark_of_commings',
         'mark_of_ratings',
@@ -22,13 +22,13 @@ class Category extends Model
     {
         return $this->belongsTo(SubjectTeacher::class);
     }
-    public function students(): HasMany
+    public function students()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsToMany(Student::class, 'category_student')
+            ->withPivot('attendance_marks','assessment_marks','number_of_assessment');
     }
- 
     public function subjectTeacher()
     {
-        return $this->belongsTo(SubjectTeacher::class, 'teacher_subject_id', 'id');
+        return $this->belongsTo(SubjectTeacher::class, 'subject_teacher_id', 'id');
     }
 }

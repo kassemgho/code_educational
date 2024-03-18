@@ -14,7 +14,7 @@ class CategoryStudent extends Model
         'student_id',
         'attendance_marks',
         'assessment_marks',
-        'number_of_assessement'
+        'number_of_assessment'
     ] ;
     
 

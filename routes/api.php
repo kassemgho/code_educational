@@ -45,6 +45,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [CategoryController::class, 'index']);
+        Route::get('/{category}' , [CategoryController::class , 'show']);
     });
     
 });
