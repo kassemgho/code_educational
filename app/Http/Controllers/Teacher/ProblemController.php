@@ -6,7 +6,6 @@ use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
-use App\Models\ProblemTag;
 use Illuminate\Http\Request;
 
 class ProblemController extends Controller
@@ -14,7 +13,10 @@ class ProblemController extends Controller
     
  
     public function index(){
-        return ProblemResource::collection(Problem::all());
+        return ProblemResource::collection(Problem::where('active' , 1)->get());
+    }
+    public function showBank(){
+        return ProblemResource::collection(Problem::where('active' , 0)->get());
     }
     public function myProblems() {
         $teacher = auth()->user()->teacher;
@@ -79,12 +81,14 @@ class ProblemController extends Controller
         ],200) ;
     }
     public function activate(Problem $problem){
+        
         if (auth()->user()->teacher->id != $problem->teacher_id){
             abort(403 , 'this problem dont belong to you' ) ;
         } 
         $problem->active = 1 ;
+        $problem->save();
         return response()->json([
-            'message' => 'added successfully'
+            'message' => 'activeted successfully'
         ],200) ;
     }
 }

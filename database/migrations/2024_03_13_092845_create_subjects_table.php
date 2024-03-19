@@ -10,6 +10,7 @@ class CreateSubjectsTable extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('total_mark')->default(30);
             $table->timestamps();
         });
     }

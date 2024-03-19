@@ -31,4 +31,8 @@ class Category extends Model
     {
         return $this->belongsTo(SubjectTeacher::class, 'subject_teacher_id', 'id');
     }
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class);
+    }
 }

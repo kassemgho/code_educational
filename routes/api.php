@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Teacher\CategoryController;
 use App\Http\Controllers\Teacher\ExamController;
+use App\Http\Controllers\Teacher\MarkController;
 use App\Http\Controllers\Teacher\ProblemController;
 use App\Http\Controllers\Teacher\TagController;
 use App\Models\Problem;
@@ -41,13 +42,18 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('active/{problem}' , [ProblemController::class , 'activate']);
         Route::delete('/{problem}' , [ProblemController::class , 'delete']);
         Route::get('/' , [ProblemController::class , 'index']);
+        Route::get('/bank' , [ProblemController::class , 'showBank']);
+        Route::get('/active/{problem}' , [ProblemController::class , 'activate']);
         Route::get('my-problems' , [ProblemController::class , 'myProblems']);
         Route::get('/{problem}', [ProblemController::class, 'show']);
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [CategoryController::class, 'index']);
         Route::get('/{category}' , [CategoryController::class , 'show']);
+        Route::post('/add-marks' , [MarkController::class , 'addMarks']);
+        Route::post('/attendance',[CategoryController::class , 'checkStudents']);
         Route::post('/{category}' , [CategoryController::class , 'updateCategory']);
+      
     });
     Route::group(['prefix' => 'exams'] , function(){
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);

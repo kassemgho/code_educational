@@ -17,7 +17,7 @@ class CategoryController extends Controller
     }
     
     public function show(Category $category){
-        $this->teacherAuth($category) ;
+        // $this->teacherAuth($category) ;
         $students = $category->students()->with(['exams' => function ($query) use ($category) {
             $query->where('subject_id', $category->subjectTeacher()->first()['subject_id']);
         }])->get();
@@ -26,16 +26,18 @@ class CategoryController extends Controller
 
     public function checkStudents(Request $request){
         $request->validate([
-            'student_ids' => 'required|array',
+            'students' => 'required|array',
             'category_id' => 'required|integer' ,
         ]);
-        
-        foreach($request->student_ids as $student_id){
-            $mark = CategoryStudent::where('student_id' ,$student_id )
+        // return $request ;
+        foreach($request->students as $student){
+            $studentCategoey = CategoryStudent::where('student_id' ,$student['id'] )
                 ->where('category_id' , $request->category_id)
                 ->first() ;
-            $mark->attendance_marks++ ;
-            $mark->save() ;
+
+            $studentCategoey->attendance_marks++;
+            $studentCategoey->assessment_marks+=$student['mark'] ;
+            $studentCategoey->save() ;
         }
         return response()->json([
             'message' => 'checked successfully'
@@ -56,4 +58,9 @@ class CategoryController extends Controller
             abort(403 , 'this category does not belong to you') ;
         }
     }
+    
 }
+/**
+
+
+ */

@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Subject extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['name' , 'total_mark'];
 
     public function teachers(): BelongsToMany
     {
@@ -23,8 +24,8 @@ class Subject extends Model
     public function subjectTeachers(){
         return $this->hasMany(SubjectTeacher::class) ;
     }
-    public function exam()
+    public function exam() 
     {
-        return $this->hasOne(Exam::class);
+        return $this->hasOne(Exam::class)->latestOfMany();
     }
 }

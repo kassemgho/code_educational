@@ -15,12 +15,13 @@ class CategoryStudentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'student_id' => $this->id,
             'student_name' => $this->user->name,
             'attendance_marks' => $this->pivot->attendance_marks,
             'assessment_marks' => $this->pivot->assessment_marks,
-            'mark' => $this->exams[0]->pivot->mark,
-            'exam_id' => $this->exams[0]->id 
+            'mark' => (count($this->exams) == 0) ? 0  : $this->exams[0]->pivot->mark ,
+            'exam_id' => (count($this->exams) == 0) ? 0 : $this->exams[0]->id 
+            
         ];
     }
 }

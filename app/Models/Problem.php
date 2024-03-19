@@ -32,15 +32,19 @@ class Problem extends Model
         return $this->belongsToMany(Student::class);
     }
 
-   public function testCases(): HasMany
-   {
-       return $this->hasMany(TestCase::class);
-   }
+    public function testCases(): HasMany
+    {
+        return $this->hasMany(TestCase::class);
+    }
 
-   public function exams(): BelongsToMany
-   {
-       return $this->belongsToMany(Exam::class);
-   }
+    public function exams(): BelongsToMany
+    {
+        return $this->belongsToMany(Exam::class);
+    }
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class);
+    }
    
 
 

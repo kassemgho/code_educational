@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\ContestStudent::factory(10)->create();
         \App\Models\Category::factory(10)->create();
         \App\Models\CategoryStudent::factory(10)->create();
-
+        \App\Models\Assessment::factory(10)->create();
         
     }
 }
