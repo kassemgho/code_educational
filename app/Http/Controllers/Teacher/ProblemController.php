@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProblemController extends Controller
 {
@@ -45,11 +46,11 @@ class ProblemController extends Controller
             $input = $test_case;
             if ($request->language == 1)
                 $output = CodeExecutorController::runCppCode([
-                    'teacher_code_solve' => $request->teacher_code_solve,
+                    'code' => $request->teacher_code_solve,
                     'input' => $test_case,
                 ]);
             else $output = CodeExecutorController::runJavaCode([
-                    'teacher_code_solve' => $request->teacher_code_solve,
+                    'code' => $request->teacher_code_solve,
                     'input' => $test_case,
                 ]);
             if (array_key_exists('error', $output)) {
@@ -90,5 +91,19 @@ class ProblemController extends Controller
         return response()->json([
             'message' => 'activeted successfully'
         ],200) ;
+    }
+    public function generateTestCases(Request $request){
+        
+        $inputs = CodeExecutorController::generateTestCases($request->model);
+        $i = 0 ;
+        $res = [];
+        foreach ($inputs as $input){
+            $res[$i]['input'] = $input ;
+            $param['input'] = $input ;
+            $param['code'] = $request->code ;
+            $res[$i]['output'] = CodeExecutorController::runJavaCode($param)['output'] ;
+            $i++;
+        }
+        return $res ;
     }
 }

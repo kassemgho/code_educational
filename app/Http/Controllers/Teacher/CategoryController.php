@@ -16,14 +16,16 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
     
-    public function show(Category $category){
+    public function showCategoryStudent(Category $category){
         // $this->teacherAuth($category) ;
         $students = $category->students()->with(['exams' => function ($query) use ($category) {
             $query->where('subject_id', $category->subjectTeacher()->first()['subject_id']);
         }])->get();
         return CategoryStudentResource::collection($students);
     }
-
+    public function show(Category $category) {
+        return $category;
+    }
     public function checkStudents(Request $request){
         $request->validate([
             'students' => 'required|array',

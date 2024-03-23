@@ -12,7 +12,7 @@ class SubjectTeacher extends Model
     protected $table = 'subject_teacher' ;
     protected $fillable = ['teacher_id' , 'subject_id'];
 
-    public function categories(): HasMany
+    public function categories()
     {
         return $this->hasMany(Category::class);
     }

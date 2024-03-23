@@ -18,10 +18,6 @@ class Category extends Model
         'mark_of_ratings',
         ] ;
 
-    public function teacherStudent(): BelongsTo
-    {
-        return $this->belongsTo(SubjectTeacher::class);
-    }
     public function students()
     {
         return $this->belongsToMany(Student::class, 'category_student')

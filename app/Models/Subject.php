@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Subject extends Model
 {
     use HasFactory;
-    protected $fillable = ['name' , 'total_mark'];
+    protected $fillable = ['name' , 'total_mark', 'exam_mark'];
 
     public function teachers(): BelongsToMany
     {

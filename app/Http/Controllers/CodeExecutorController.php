@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+// use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Facades\Storage;
 
 class CodeExecutorController extends Controller
@@ -10,15 +11,15 @@ class CodeExecutorController extends Controller
     {
         
         // Receive the C++ code and input from the request.
-        $cppCode = $param['teacher_code_solve'];
+        $cppCode = $param['code'];
         $input = $param['input']; // Default to an empty string if 'input' is not provided.
 
         // Create a temporary input file and write the input data to it.
-        $inputFilePath = tempnam(sys_get_temp_dir(), 'cpp_input_');
+        $inputFilePath = tempnam(sys_get_temp_dir(), 'Code/cpp_input_');
         file_put_contents($inputFilePath, $input);
 
         // Create a temporary error file for compilation or execution errors.
-        $errorFilePath = tempnam(sys_get_temp_dir(), 'cpp_error_');
+        $errorFilePath = tempnam(sys_get_temp_dir(), 'Code/cpp_error_');
         $salt = random_int(1, 1000000);
         // Run the C++ code with input and capture the output and errors.
         $command = "echo '$cppCode' > /tmp/cpp_code_$salt.cpp && g++ /tmp/cpp_code_$salt.cpp -o /tmp/cpp_code_output_$salt 2> $errorFilePath && cat $inputFilePath | /tmp/cpp_code_output_$salt";
@@ -51,25 +52,35 @@ class CodeExecutorController extends Controller
       
         $salt = random_int(0,1000000) ;
         // Receive the Java code and input from the request.
-        $javaCode = $param['teacher_code_solve'];
+        $javaCode = $param['code'];
         $input = $param['input']; // Default to an empty string if 'input' is not provided.
-        // Create a temporary input file and write the input data to it.
+        $errorFilePath = tempnam(sys_get_temp_dir(), 'java_error_');
         $inputFilePath = tempnam(sys_get_temp_dir(), 'java_input_');
         file_put_contents($inputFilePath, $input);
 
-        // Create a temporary error file for compilation or execution errors.
-        $errorFilePath = tempnam(sys_get_temp_dir(), 'java_error_');
+        $filename =  "java_code$salt.java";
+
+        // Path to the /tmp directory
+        $tmpDirectory = "/tmp/";
+        // Write the text to a file in the /tmp directory
+        file_put_contents($tmpDirectory . $filename, $param['code']);
+
 
         // Compile the Java code and capture the errors, if any.
-        $compileCommand = "echo '$javaCode' > /tmp/java_code$salt.java && javac /tmp/java_code$salt.java 2> $errorFilePath ";
-        // return $compileCommand ;
+        
+        $compileCommand =  "javac /tmp/java_code$salt.java 2> $errorFilePath ";
+        // return $compileCommand ; 
+
         exec($compileCommand, $compileOutput, $compileReturnCode);
         
-        
+        $compileCommand = "javac /tmp/java_code$salt.java 2> $errorFilePath" ;
+        exec($compileCommand, $compileOutput, $compileReturnCode);
         if ($compileReturnCode !== 0) {
             // Compilation error occurred.
             $errorOutput = file_get_contents($errorFilePath);
-
+            unlink($inputFilePath);
+            unlink($errorFilePath);
+            unlink("/tmp/java_code$salt.java");
             // Return the error message as a response.
             return ['error' => $errorOutput];
         }
@@ -88,7 +99,13 @@ class CodeExecutorController extends Controller
         return ['output' => implode(PHP_EOL, $output)];
     }
 
-
+    Public static  function generateTestCases($model){
+        $salt = random_int(0 , 1000000) ;
+        $executionCommand = "cd /home/kassem/Projects/Graduated_Project/code/storage/app/public && echo \"$model\" | java Main" ;
+        // return $executionCommand ;
+        exec($executionCommand, $output, $executionReturnCode);
+        return $output ; 
+    }
     public function replaceWordInFile() {
         $filePath = 'Main.java';
         $searchWord = 'Main';

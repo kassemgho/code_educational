@@ -49,7 +49,8 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [CategoryController::class, 'index']);
-        Route::get('/{category}' , [CategoryController::class , 'show']);
+        Route::get('/{category}/students' , [CategoryController::class , 'showCategoryStudent']);
+        Route::get('/{category}/details', [CategoryController::class, 'show']);
         Route::post('/add-marks' , [MarkController::class , 'addMarks']);
         Route::post('/attendance',[CategoryController::class , 'checkStudents']);
         Route::post('/{category}' , [CategoryController::class , 'updateCategory']);
@@ -63,4 +64,5 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
     
 });
+Route::post('test' , [ProblemController::class , 'generateTestCases']) ;
 
