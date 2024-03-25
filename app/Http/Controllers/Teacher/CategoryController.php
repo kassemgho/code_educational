@@ -18,6 +18,7 @@ class CategoryController extends Controller
     
     public function showCategoryStudent(Category $category){
         // $this->teacherAuth($category) ;
+       
         $students = $category->students()->with(['exams' => function ($query) use ($category) {
             $query->where('subject_id', $category->subjectTeacher()->first()['subject_id']);
         }])->get();
@@ -38,6 +39,7 @@ class CategoryController extends Controller
                 ->first() ;
 
             $studentCategoey->attendance_marks++;
+            $studentCategoey->number_of_assessment++;
             $studentCategoey->assessment_marks+=$student['mark'] ;
             $studentCategoey->save() ;
         }
@@ -60,6 +62,7 @@ class CategoryController extends Controller
             abort(403 , 'this category does not belong to you') ;
         }
     }
+    
     
 }
 /**

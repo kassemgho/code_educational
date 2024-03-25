@@ -27,4 +27,5 @@ class ExamController extends Controller
             'message' => 'updated successfully'
         ],200);
     }
+    
 }

@@ -9,7 +9,7 @@ class Assessment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'problem_id' , 'category_id' , 'teacher_id' , 'active' 
+      'name',  'problem_id' , 'category_id' , 'teacher_id' , 'active' 
     ];
     public function teacher()
     {

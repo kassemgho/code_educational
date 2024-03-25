@@ -6,6 +6,7 @@ use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
+use Faker\Provider\Base;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,34 +40,41 @@ class ProblemController extends Controller
         
         $problem = $teacher->problems()->create($request->all());
         // add tags to problem
+        $maxTim = 0 ;
         foreach($request->tags as $tag)
             $problem->tags()->attach($tag);
         // add test_cases to problem
         foreach($request->test_cases as $test_case) {
             $input = $test_case;
-            if ($request->language == 1)
+            if ($request->language == 1){
                 $output = CodeExecutorController::runCppCode([
                     'code' => $request->teacher_code_solve,
                     'input' => $test_case,
                 ]);
-            else $output = CodeExecutorController::runJavaCode([
+            }
+            else{
+                $output = CodeExecutorController::runJavaCode([
                     'code' => $request->teacher_code_solve,
                     'input' => $test_case,
                 ]);
-            if (array_key_exists('error', $output)) {
-                $problem->delete() ;
+            }
+            if (array_key_exists('error' , $output)) {
                 return response()->json([
                     'input' => $test_case ,
-                    'output' => $output,
-                    
+                    'output' => $output['output'],
                 ]);
             }
+            if ($output['time'] > $maxTim)$maxTim = $output['time'] ;
             $problem->testCases()->create([
                 'input'=>$input ,
                 'output' => $output['output'],
             ]);
         }
-     return $problem->testCases ;   
+        //add the time of the problem and we can make it integer to present seconds . 
+        $problem->time_limit_ms = $maxTim + 0.2 ;
+        $problem->save() ;
+        $problem->testCases ;
+        return $problem ;   
     }
     public function show(Problem $problem) {
         $problem->tags;
@@ -101,7 +109,9 @@ class ProblemController extends Controller
             $res[$i]['input'] = $input ;
             $param['input'] = $input ;
             $param['code'] = $request->code ;
-            $res[$i]['output'] = CodeExecutorController::runJavaCode($param)['output'] ;
+            if ($request->lang == 1)
+                $res[$i]['output'] = CodeExecutorController::runCppCode($param)['output'] ;
+            else $res[$i]['output'] = CodeExecutorController::runJavaCode($param)['output'];
             $i++;
         }
         return $res ;

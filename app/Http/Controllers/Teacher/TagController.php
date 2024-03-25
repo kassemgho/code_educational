@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 class TagController extends Controller
 {
     public function addTag(Request $request) {
+        $request->validate([
+            'name' => 'required' 
+        ]);
         Tag::create([
             'name' => $request->name
         ]);

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->default('assessment');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
             $table->foreignId('problem_id')->constrained('problems')->onDelete('cascade');

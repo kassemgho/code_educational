@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CodeExecutorController extends Controller
 {
-    public static function runCppCode(array $param)
+    public static function runCppCode(array $param):array
     {
         
         // Receive the C++ code and input from the request.
@@ -21,10 +21,18 @@ class CodeExecutorController extends Controller
         // Create a temporary error file for compilation or execution errors.
         $errorFilePath = tempnam(sys_get_temp_dir(), 'Code/cpp_error_');
         $salt = random_int(1, 1000000);
-        // Run the C++ code with input and capture the output and errors.
-        $command = "echo '$cppCode' > /tmp/cpp_code_$salt.cpp && g++ /tmp/cpp_code_$salt.cpp -o /tmp/cpp_code_output_$salt 2> $errorFilePath && cat $inputFilePath | /tmp/cpp_code_output_$salt";
-        exec($command, $output, $returnCode);
+        $filename =  "cpp_code_$salt.cpp";
 
+        // Path to the /tmp directory
+        $tmpDirectory = "/tmp/";
+        // Write the text to a file in the /tmp directory
+        file_put_contents($tmpDirectory . $filename, $param['code']);
+        // Run the C++ code with input and capture the output and errors.
+        $command = "g++ /tmp/cpp_code_$salt.cpp -o /tmp/cpp_code_output_$salt 2> $errorFilePath && cat $inputFilePath | /tmp/cpp_code_output_$salt";
+        // return $command ;
+        $start_time = microtime(true) ; 
+        exec($command, $output, $returnCode);
+        $end_time = microtime(true) ;
         if ($returnCode !== 0) {
             // Compilation or execution error occurred.
                 // Clean up temporary files.
@@ -40,16 +48,16 @@ class CodeExecutorController extends Controller
 
         // Clean up temporary files.
         unlink($inputFilePath);
-        // unlink($errorFilePath);
+        unlink($errorFilePath);
         unlink("/tmp/cpp_code_$salt.cpp");
         unlink("/tmp/cpp_code_output_$salt");
         // Return the output as a response.
-        return ['output' => implode(PHP_EOL, $output)];
+        return ['output' => implode(PHP_EOL, $output), 'time' => $end_time - $start_time];
     }
 
-    public static function runJavaCode(array $param)
+    public static function runJavaCode(array $param):array
     {
-      
+        $start_time = microtime(true) ;
         $salt = random_int(0,1000000) ;
         // Receive the Java code and input from the request.
         $javaCode = $param['code'];
@@ -86,8 +94,9 @@ class CodeExecutorController extends Controller
         }
         // Run the compiled Java code with input and capture the output.
         $executionCommand = "cd /tmp  && cat $inputFilePath | java Main" ;
+        $start_time = microtime(true);
         exec($executionCommand, $output, $executionReturnCode);
-       
+        $end_time = microtime(true);
 
         // Clean up temporary files.
         unlink($inputFilePath);
@@ -96,7 +105,7 @@ class CodeExecutorController extends Controller
         unlink("/tmp/Main.class"); // Remove compiled .class file
 
         // Return the output as a response.
-        return ['output' => implode(PHP_EOL, $output)];
+        return ['output' => implode(PHP_EOL, $output) , 'time' => $end_time - $start_time];
     }
 
     Public static  function generateTestCases($model){
