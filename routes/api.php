@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Adminstrator\StudentController as AdminStudentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\ExcelImportController;
@@ -32,7 +33,12 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','adminstrator']] , function(){
-
+   Route::get('test' ,function(){
+    return 'mouaz' ;
+   });
+    Route::group(['prefix' => 'students'] , function(){
+        Route::post('distribute' , [AdminStudentController::class , 'distributeCategories']);
+    });
 });
     
 
@@ -53,6 +59,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::get('my-problems' , [ProblemController::class , 'myProblems']);
         Route::get('/{problem}', [ProblemController::class, 'show']);
         Route::post('add-tag' , [TagController::class , 'addTag']);
+        Route::post('generate-test-cases' , [ProblemController::class , 'generateTestCases']);
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/min' , [CategoryController::class, 'myCategory']);
@@ -64,6 +71,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     });
     Route::group(['prefix' => 'exams'] , function(){
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
+        Route::post('/answers' , [ExamController::class, 'show']);
     });
     Route::group(['prefix' => 'assessment'] , function(){
         Route::post('/create' , [AssessmentController::class, 'store']);
@@ -75,7 +83,7 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
     
 });
 Route::post('test' , [ExcelImportController::class , 'test']) ;
-
+Route::get('testf' , [ExcelImportController::class , 'test']);
 Route::post('run' , function(Request $request){
     $param['input'] = $request->input ;
     $param['code'] = $request->code ;

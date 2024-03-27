@@ -37,15 +37,15 @@ class Problem extends Model
         return $this->hasMany(TestCase::class);
     }
 
-    public function exams(): BelongsToMany
+    public function exams()
     {
-        return $this->belongsToMany(Exam::class);
+        return $this->hasMany(Exam::class);
     }
     public function assessments()
     {
         return $this->hasMany(Assessment::class);
     }
    
-
+  
 
 }

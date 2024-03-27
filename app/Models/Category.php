@@ -12,7 +12,8 @@ class Category extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'subject_teacher_id',
+        'subject_id',
+        'teacher_id',
         'number_of_lessons',
         'mark_of_commings',
         'mark_of_ratings',

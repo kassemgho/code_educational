@@ -11,11 +11,12 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('subject_teacher_id')->constrained('subject_teacher')->onDelete('cascade');
-            $table->integer('number_of_lessons');
-            $table->integer('number_of_ratings');
-            $table->float('mark_of_commings');
-            $table->float('mark_of_ratings');
+            $table->integer('number_of_lessons')->default(0);
+            $table->integer('number_of_ratings')->default(0);
+            $table->float('mark_of_commings')->default(0);
+            $table->float('mark_of_ratings')->default(0);
+            $table->foreignId('teacher_id')->nullable()->constrained('teachers')->cascadeOnDelete();
+            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
             $table->timestamps();
         });
     }

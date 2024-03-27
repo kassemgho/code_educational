@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 // use Illuminate\Contracts\Cache\Store;
+
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class CodeExecutorController extends Controller
 {
@@ -109,15 +112,15 @@ class CodeExecutorController extends Controller
     }
 
     Public static  function generateTestCases($model){
-        $salt = random_int(0 , 1000000) ;
+        // $salt = random_int(0 , 1000000) ;
         $executionCommand = "cd /home/kassem/Projects/Graduated_Project/code/storage/app/public && echo \"$model\" | java Main" ;
-        // return $executionCommand ;
         exec($executionCommand, $output, $executionReturnCode);
         return $output ; 
     }
     public function replaceWordInFile() {
         $filePath = 'Main.java';
         $searchWord = 'Main';
+        
         $replaceWord = 'Kasseem';
         $content = Storage::get($filePath);
         return $content;

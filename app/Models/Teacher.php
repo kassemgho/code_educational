@@ -30,10 +30,7 @@ class Teacher extends Model
     }
     public function categories()
     {
-        return $this->hasManyThrough(Category::class, SubjectTeacher::class, 'teacher_id', 'subject_teacher_id', 'id', 'id');
-    }
-    public function subjectTeachers(){
-        return $this->hasMany(SubjectTeacher::class) ;
+        return $this->hasMany(Category::class);
     }
     
     public function assessments()

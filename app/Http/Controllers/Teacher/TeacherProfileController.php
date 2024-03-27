@@ -14,7 +14,7 @@ class TeacherProfileController extends Controller
     }
     public function update(Request $request){
         $teacher = auth()->user()->teacher ;
-        $user = auth()->user() ;
+        $user = auth()->user ;//try with () ;
         
         $teacher->update($request->all()) ;
         $user->update($request->all());

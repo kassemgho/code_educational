@@ -10,4 +10,8 @@ class ExamStudent extends Model
     use HasFactory;
     protected $table = 'exam_student';
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }

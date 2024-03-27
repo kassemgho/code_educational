@@ -7,7 +7,11 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryStudentResource;
 use App\Models\Category;
 use App\Models\CategoryStudent;
+use App\Models\Student;
+use App\Models\Subject;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -52,8 +56,6 @@ class CategoryController extends Controller
         $category->update($request->all());
         return $category ;
     }
-    
-
 
     protected function teacherAuth( Category $category){
         $teacher = $category->subjectTeacher()->first()->teacher;
@@ -62,6 +64,7 @@ class CategoryController extends Controller
             abort(403 , 'this category does not belong to you') ;
         }
     }
+
     
     
 }

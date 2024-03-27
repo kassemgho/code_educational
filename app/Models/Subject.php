@@ -19,10 +19,7 @@ class Subject extends Model
     }
     public function categories()
     {
-        return $this->hasMany(Category::class, 'teacher_subject_id', 'id');
-    }
-    public function subjectTeachers(){
-        return $this->hasMany(SubjectTeacher::class) ;
+        return $this->hasMany(Category::class);
     }
     public function exam() 
     {

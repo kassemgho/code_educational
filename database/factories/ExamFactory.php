@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Administrator;
+use App\Models\Problem;
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,9 @@ class ExamFactory extends Factory
             'administrator_id' => Administrator::inRandomOrder()->value('id'),
             'name' => $this->faker->word,
             'time' => $this->faker->dateTime(),
-            'subject_id' => Subject::inRandomOrder()->value('id')
+            'subject_id' => Subject::inRandomOrder()->value('id'),
+            'problem1_id' => Problem::inRandomOrder()->value('id'),
+            'problem2_id' => Problem::inRandomOrder()->value('id'),
         ];
     }
 }
