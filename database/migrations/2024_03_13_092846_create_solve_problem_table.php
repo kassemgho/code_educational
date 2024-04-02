@@ -11,7 +11,7 @@ class CreateSolveProblemTable extends Migration
             $table->id();
             $table->foreignId('problem_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->string('student_code');
+            $table->text('student_code');
             $table->boolean('approved');
             $table->timestamps();
         });

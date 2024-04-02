@@ -13,6 +13,7 @@ class CreateStudentsTable extends Migration
             $table->string('phone_number');
             $table->integer('hint_count')->default(2);
             $table->integer('points')->default(0);
+            $table->integer('reate')->default(0) ;
             $table->date('date_of_birth')->nullable();
             $table->integer('university_id')->nullable();
             $table->timestamps();

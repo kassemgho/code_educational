@@ -12,6 +12,7 @@ class CreateProblemsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->integer('level')->default(800);
             $table->string('teacher_code_solve');
             $table->float('time_limit_ms')->default(0.0) ;
             $table->boolean('active')->default(0);

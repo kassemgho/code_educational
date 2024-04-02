@@ -9,6 +9,6 @@ class ContestStudent extends Model
 {
     use HasFactory;
     protected $table = 'contest_student' ;
-    protected $fillable = ['contest_id' , 'student_id'] ;
+    protected $fillable = ['contest_id' , 'student_id' , 'rank'] ;
 
 }

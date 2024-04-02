@@ -9,5 +9,11 @@ class SolveProblem extends Model
 {
     use HasFactory;
     protected $table = 'solve_problem' ;
-
+    protected $fillable  = [
+        'student_id' ,'problem_id' , 'student_code' ,'approved'
+    ];
+    public function solveCases()
+    {
+        return $this->hasMany(SolveCases::class);
+    }
 }

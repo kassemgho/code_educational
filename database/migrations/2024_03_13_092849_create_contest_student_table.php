@@ -11,6 +11,7 @@ class CreateContestStudentTable extends Migration
             $table->id();
             $table->foreignId('contest_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->integer('rank')->default(0);
             $table->timestamps();
         });
     }

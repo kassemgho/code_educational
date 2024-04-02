@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Contracts\Cache\Store;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
@@ -131,5 +132,31 @@ class CodeExecutorController extends Controller
             'message' => 'word replaced succfully...'
         ]);
 
+    }
+    public static function runCpp($param){
+        $client = new Client();
+          
+        $url = 'http://127.0.0.1:8001/api/run-cpp'; // Replace 8080 with the actual port number
+
+        try {
+            $response = $client->request('POST', $url, [
+                'json' => [
+                    'code' => $param['code'],
+                    'input' =>$param['input'],
+                ]
+            ]);
+
+            // Get the response body
+            $body = $response->getBody();
+            $contents = $body->getContents();
+            // return   $body ;
+            // Process the response as needed
+            // For example, you can return the response to the client
+            return response()->json(json_decode($contents), $response->getStatusCode());
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // Handle request exceptions (e.g., connection errors, timeouts)
+            // Log the error or return an appropriate response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
