@@ -19,7 +19,7 @@ class ProblemFactory extends Factory
 
     {
         $p = [] ;
-        $p[0] = [ 
+        $p[] = [ 
         "code" => "#include<iostream>
                 using namespace std ;
                 int main(){
@@ -30,36 +30,36 @@ class ProblemFactory extends Factory
                 }",
         "name" => 'add tow number' ,
     ];
-    // $p[1] = [ 
-    //     "code" => "#include<iostream>
-    //             using namespace std ;
-    //             int main(){
-    //                 int x ;  ;
-    //                 cin>>x ;
-    //                 int sum = 0 ;
-    //                 for (int i = 0 ; i< x ; i++){int k ; cin >> k ; sum+=k;}
-    //                 cout << sum ;
-    //                 return 0 ;
-    //             }",
-    //     "name" => 'array sum' ,
-    // ];
-    // $p[2] = [ 
-    //     "code" => "#include<iostream>
-    //             using namespace std ;
-    //             int main(){
-    //                 int x ;  ;
-    //                 cin>>x ;
-    //                 int a[x] ;
-    //                 for (int i = 0 ; i< x ; i++){cin >> a[i]}
-    //                 max = a[0] ;
-    //                 for (int i = 0 ; i< x ; i++){
-    //                     if (a[i] > max ) max = a[i] ;
-    //                 }
-    //                 cout << max;
-    //                 return 0 ;
-    //             }",
-    //     "name" => 'max val' ,
-    // ];
+    $p[] = [ 
+        "code" => "#include<iostream>
+                using namespace std ;
+                int main(){
+                    int x ;  ;
+                    cin>>x ;
+                    int sum = 0 ;
+                    for (int i = 0 ; i< x ; i++){int k ; cin >> k ; sum+=k;}
+                    cout << sum ;
+                    return 0 ;
+                }",
+        "name" => 'array sum' ,
+    ];
+    $p[] = [
+        "code" => "#include<iostream>
+                using namespace std ;
+                int main(){
+                    int x ;  ;
+                    cin>>x ;
+                    int a[x] ;
+                    for (int i = 0 ; i< x ; i++){cin >> a[i]}
+                    max = a[0] ;
+                    for (int i = 0 ; i< x ; i++){
+                        if (a[i] > max ) max = a[i] ;
+                    }
+                    cout << max;
+                    return 0 ;
+                }",
+        "name" => 'max val' ,
+    ];
     
     $rand = random_int(0,2);
         return [
