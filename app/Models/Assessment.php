@@ -23,5 +23,11 @@ class Assessment extends Model
     {
         return $this->belongsTo(Problem::class);
     }
+    
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)
+            ->withPivot('mark' , 'solve');
+    }
 
 }

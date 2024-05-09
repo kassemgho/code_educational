@@ -34,4 +34,14 @@ class Student extends Model
     {
         return $this->belongsToMany(Contest::class);
     }
+    public function requests()
+    {
+        return $this->hasMany(ChangeCategoryRequest::class);
+    }
+
+    public function assessments(): BelongsToMany
+    {
+        return $this->belongsToMany(Assessment::class)
+            ->withPivot('mark' , 'solve');
+    }
 }

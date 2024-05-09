@@ -6,9 +6,7 @@ use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
-use Faker\Provider\Base;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProblemController extends Controller
 {
@@ -18,11 +16,12 @@ class ProblemController extends Controller
         return ProblemResource::collection(Problem::where('active' , 1)->get());
     }
     public function showBank(){
-        return ProblemResource::collection(Problem::where('active' , 0)->get());
+        $problems = auth()->user()->teacher->problems()->where('active' , 0)->get() ;
+        return ProblemResource::collection($problems);
     }
     public function myProblems() {
         $teacher = auth()->user()->teacher;
-        $problems = $teacher->problems;
+        $problems = $teacher->problems();
         return response()->json([
             'data' => $problems
         ], 200);
@@ -35,9 +34,8 @@ class ProblemController extends Controller
             'teacher_code_solve' => 'required',
             'language' => 'required|integer',
             'test_cases' => 'required|array',
-            'tags' => 'required|array'
+            'tags' => 'required|array',
         ]);
-        
         $problem = $teacher->problems()->create($request->all());
         // add tags to problem
         $maxTim = 0 ;
@@ -59,9 +57,10 @@ class ProblemController extends Controller
                 ]);
             }
             if (array_key_exists('error' , $output)) {
+                $problem->delete() ;
                 return response()->json([
                     'input' => $test_case ,
-                    'output' => $output['output'],
+                    'output' =>'wrong test case ' . $output['error'],
                 ]);
             }
             if ($output['time'] > $maxTim)$maxTim = $output['time'] ;
@@ -78,6 +77,7 @@ class ProblemController extends Controller
     }
     public function show(Problem $problem) {
         $problem->tags;
+        $problem->testCase ;
         return $problem ;
     }
     public function delete(Problem $problem){
@@ -94,7 +94,7 @@ class ProblemController extends Controller
         if (auth()->user()->teacher->id != $problem->teacher_id){
             abort(403 , 'this problem dont belong to you' ) ;
         } 
-        $problem->active = 1 ;
+        $problem->in_bank = 0 ;
         $problem->save();
         return response()->json([
             'message' => 'activeted successfully'

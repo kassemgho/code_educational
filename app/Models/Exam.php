@@ -11,7 +11,7 @@ class Exam extends Model
 {
     use HasFactory;
     protected $fillable = [
-      'problem1_id','problem2_id',  'passwd' , 'adminstrator_id' , 'name' ,'time', 'subject_id'
+      'problem1_id','problem2_id',  'passwd' , 'administrator_id' , 'name' ,'time', 'subject_id'
     ] ;
 
 

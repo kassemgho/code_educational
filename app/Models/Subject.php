@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Subject extends Model
 {
@@ -24,5 +23,13 @@ class Subject extends Model
     public function exam() 
     {
         return $this->hasOne(Exam::class)->latestOfMany();
+    }
+    public function requests()
+    {
+        return $this->hasMany(ChangeCategoryRequest::class);
+    }
+    public function students()
+    {
+        return $this->belongsToMany(Student::class);
     }
 }

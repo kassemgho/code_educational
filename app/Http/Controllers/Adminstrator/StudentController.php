@@ -3,16 +3,43 @@
 namespace App\Http\Controllers\Adminstrator;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentDispalyResource;
 use App\Models\Category;
+use App\Models\ChangeCategoryRequest;
 use App\Models\SetOfStudent;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
+    public function index() {
+        $data['students'] = Student::all();
+        $data['change_class_request'] = ChangeCategoryRequest::all()->map(function ($request) {
+            return [
+                'student_name' => $request->student->user->name,
+                'old_class' => $request->old_category,
+                'new_class' => $request->new_category, 
+                'subject' => $request->subject->name,
+            ];
+        });
+        return $data;
+    }
+    public function changeStudentPassword(Student $student) {
+        $new_password = Str::random(16);
+        $user = User::where('id', $student->user_id)->first();
+        $user->password = Hash::make($new_password);
+        $user->save();
+        return response()->json([
+            'message' => 'your password changed successfully',
+            'new_password' => $new_password
+        ]);
+    }
     public function importStudents(Request $request ){
         $request->validate([
             'file' => 'required'
@@ -52,12 +79,13 @@ class StudentController extends Controller
             ]);
         }
         foreach ($rows as $row){
-            if ($row[0] == 'number') continue;
+            if ($row[0] == 'class') continue;
+            
             $user = User::where('name', $row[1])->first();
-            $student = $user->student ;
+            $student = $user->student;
             foreach($categories as $category){
                 if ($category->name[strlen($category->name)-1] == $row[0]){
-                    $student->categories()->attach($row[0]);
+                    $student->categories()->attach($category->id);
                 }
             }
         }

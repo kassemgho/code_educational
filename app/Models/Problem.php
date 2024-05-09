@@ -12,7 +12,7 @@ class Problem extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'time_limit_ms','teacher_id' , 'name' , 'description' , 'teacher_code_solve', 'active' , 'hint1' , 'hint2' , 'level'
+        'time_limit_ms','teacher_id' , 'name' , 'description' , 'teacher_code_solve', 'active' , 'hint1' , 'hint2' , 'level' , 'in_bank'
     ];
     protected $hidden = [
         'teacher_code_solve'
@@ -29,7 +29,7 @@ class Problem extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class , '');
     }
 
     public function testCases(): HasMany
@@ -38,7 +38,7 @@ class Problem extends Model
     }
     
     public function testCase(){
-        return $this->hasOne(TestCase::class)->latestOfMany() ;
+        return $this->hasOne(TestCase::class) ;
     }
 
     public function exams()

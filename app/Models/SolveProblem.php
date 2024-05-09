@@ -16,4 +16,7 @@ class SolveProblem extends Model
     {
         return $this->hasMany(SolveCases::class);
     }
+    public function finalCase(){
+        return $this->hasone(SolveCases::class)->latestOfMany() ;
+    }
 }

@@ -17,6 +17,7 @@ class CategoryController extends Controller
 {
     public function index() {
         $categories = auth()->user()->teacher->categories;
+        // return $categories ;
         return CategoryResource::collection($categories);
     }
     

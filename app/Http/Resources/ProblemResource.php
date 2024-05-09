@@ -17,9 +17,9 @@ class ProblemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'teacher_name' => $this->teacher->user->name,
+            'title' => $this->name,
             'tags' => $this->tags,
+            'diffculty' => $this->diffculty ,
             'active' => $this->active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->updated_at->format('Y-m-d'),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Adminstrator\CategoryController as AdminstratorCategoryController;
 use App\Http\Controllers\Adminstrator\StudentController as AdminStudentController;
+use App\Http\Controllers\Adminstrator\ExamController as AdminstratorExamController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\ExcelImportController;
@@ -13,8 +14,10 @@ use App\Http\Controllers\Teacher\ProblemController;
 use App\Http\Controllers\Teacher\TagController;
 use App\Http\Controllers\Teacher\TeacherProfileController;
 use App\Http\Controllers\Adminstrator\TeacherController;
+use App\Http\Controllers\Student\CategoryController as StudentCategoryController;
 use App\Http\Controllers\Student\ContestController;
 use App\Http\Controllers\Student\ProblemController as StudentProblemController;
+use App\Http\Controllers\Teacher\AuthController as TeacherAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +39,15 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','adminstrator']] , function(){
+    Route::get('teachers', [TeacherController::class, 'index']);
+    Route::post('teachers/add', [TeacherController::class, 'addTeacher']);
+    Route::get('categories-with-subjects', [AdminstratorCategoryController::class, 'categoriesWithSubjects']);
+    Route::get('exams', [AdminstratorExamController::class, 'index']);
+    Route::get('exams/{exam}', [AdminstratorExamController::class, 'show']);
+    Route::post('add-exam/{subject}', [AdminstratorExamController::class, 'addExamToSubject']);
+    Route::get('students', [AdminStudentController::class, 'index']);
+    Route::post('students/{student}/change-password', [AdminStudentController::class, 'changeStudentPassword']);
+    Route::post('students/import', [AdminStudentController::class, 'importStudents']);
     Route::post('add-teacher2category' , [TeacherController::class , 'assignmentTeacherToCategory']);
     Route::get('categries-no-teachers' , [AdminstratorCategoryController::class , 'categoriesWihtNoTeacher']);
     Route::group(['prefix' => 'students'] , function(){
@@ -45,9 +57,11 @@ Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','admi
     
 
 Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']] , function(){
+    Route::post('login' , [TeacherAuthController::class , 'login']);
     Route::group(['prefix' => 'profile'] , function(){
         Route::get('/' , [TeacherProfileController::class ,'show']);
         Route::post('/' , [TeacherProfileController::class ,'update']);
+        Route::post('change-password' , [TeacherProfileController::class , 'changePassword']) ;
         
     });
     Route::post('add-tag' , [TagController::class , 'addTag']);
@@ -64,36 +78,49 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('generate-test-cases' , [ProblemController::class , 'generateTestCases']);
     });
     Route::group(['prefix' => 'categories'] , function(){
-        Route::get('/min' , [CategoryController::class, 'myCategory']);
+        Route::get('/min' , [CategoryController::class, 'index']);
         Route::get('/{category}/students' , [CategoryController::class , 'showCategoryStudent']);
         Route::post('/add-marks' , [MarkController::class , 'addMarks']);
         Route::post('/attendance',[CategoryController::class , 'checkStudents']);
         Route::post('/{category}' , [CategoryController::class , 'updateCategory']);
-      
     });
+
     Route::group(['prefix' => 'exams'] , function(){
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
         Route::post('/answers' , [ExamController::class, 'show']);
     });
     Route::group(['prefix' => 'assessment'] , function(){
+        Route::get('/{category}' ,[ AssessmentController::class , 'index']) ;
         Route::post('/create' , [AssessmentController::class, 'store']);
         Route::get('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
-        Route::get('/active/{assessment}' , [AssessmentController::class , 'activeAssessment']);
+        Route::post('/check-attendance/{assessment}' , [AssessmentController::class , 'checkStudents']);
     });
 });
+//kassem
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
-    Route::group(['prefix' => 'problem'] , function(){
+    Route::group(['prefix' => 'problems'] , function(){
         Route::post('solve/{problem}' , [StudentProblemController::class , 'solve']);
+        Route::get('/' , [StudentProblemController::class , 'problems']);
+        Route::post('fillter' , [StudentProblemController::class , 'filter']);
+        Route::get('{problem}' , [StudentProblemController::class , 'show']);
+        Route::get('/test-cases/{solve}' ,[StudentProblemController::class , 'testCases']);
+        Route::get('/solves/{problem}' , [StudentProblemController::class , 'solves']);
     });
     Route::group(['prefix' => 'contests'] , function(){
         Route::post('create' , [ContestController::class , 'create']);
         Route::post('{contest}/solve/{problem}' , [ContestController::class , 'solve']);
+        Route::post('join/{contest}' , [ContestController::class , 'join']);
+    });
+    Route::group(['prefix' => 'categories'] , function(){
+        Route::get('/' , [StudentCategoryController::class , 'myCategories']);
     });
 });
+
+
 Route::post('test' , [ExcelImportController::class , 'test']) ;
 Route::get('testf' , [ExcelImportController::class , 'test']);
 Route::post('run' , function(Request $request){
     $param['input'] = $request->input ;
     $param['code'] = $request->code ;
-    return CodeExecutorController::runJavaCode($param);
+    return CodeExecutorController::runCPPCode($param);
 });

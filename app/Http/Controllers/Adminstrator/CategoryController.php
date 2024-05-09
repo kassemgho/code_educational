@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Adminstrator;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoriesSubjectsResource;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -14,5 +15,8 @@ class CategoryController extends Controller
             'message' => 'done'
         ],200);
     }
-    
+    public function categoriesWithSubjects() {
+        $data = Category::with('teacher', 'subject', 'students')->get();
+        return CategoriesSubjectsResource::collection($data);
+    }
 }
