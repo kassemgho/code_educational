@@ -11,16 +11,22 @@ use Illuminate\Http\Request;
 
 class ContestController extends Controller
 {
+    public function myContests() {
+        $student = auth()->user()->student;
+        return $student->contests;
+    }
     public function create(Request $request){
+        $student = auth()->user()->student ;
         $request->validate([
             'name' => 'required|string',
             'duration' => 'integer',
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'min_level' => 'required|integer|min:1|max:10',
             'max_level' => 'required|integer|min:0|max:10',
+            'students' => 'required|array' 
         ]);
         $scour = 0 ;
-        $contest = Contest::create($request->all());
+        $contest = $student->contests()->create($request->all());
         $problems = Problem::whereBetween('level', [$request->min_level, $request->max_level])
                     ->inRandomOrder()
                     ->take(5)   
@@ -29,7 +35,12 @@ class ContestController extends Controller
             $scour +=$problem->level ;
             $contest->problems()->attach($problem->id);
         }
-        $contest->scour = $scour ;
+        $contest->scoure = $scour ;
+    
+        foreach($request->students as $student_id){
+            if ($student_id !== $student->id)
+            $contest->students()->attach($student_id) ;
+        }
         $contest->save() ;
         return response()->json([
             'message' => "contest will start at $request->start_at",
@@ -89,6 +100,17 @@ class ContestController extends Controller
             abort(403,'contest not start yet');
         else if ($currentDateTime->subHours($contest->duration) > $contest->start_at)
             abort(403,'contest is over') ; 
+    }
+    public function show (Contest $contest){
+        
+        $contest->students;
+        $contest->problems->map(function($problem){
+            return [
+                'id' => $problem->id ,
+                'name' => $problem->name ,
+            ] ;
+        });
+        return $contest ;
     }
     
 }

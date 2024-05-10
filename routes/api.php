@@ -14,9 +14,11 @@ use App\Http\Controllers\Teacher\ProblemController;
 use App\Http\Controllers\Teacher\TagController;
 use App\Http\Controllers\Teacher\TeacherProfileController;
 use App\Http\Controllers\Adminstrator\TeacherController;
+use App\Http\Controllers\Student\AuthController as StudentAuthController;
 use App\Http\Controllers\Student\CategoryController as StudentCategoryController;
 use App\Http\Controllers\Student\ContestController;
 use App\Http\Controllers\Student\ProblemController as StudentProblemController;
+use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Teacher\AuthController as TeacherAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+Route::post('student/register', [StudentAuthController::class, 'register']);
+
 Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','adminstrator']] , function(){
     Route::get('teachers', [TeacherController::class, 'index']);
     Route::post('teachers/add', [TeacherController::class, 'addTeacher']);
@@ -49,9 +53,9 @@ Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','admi
     Route::post('students/{student}/change-password', [AdminStudentController::class, 'changeStudentPassword']);
     Route::post('students/import', [AdminStudentController::class, 'importStudents']);
     Route::post('add-teacher2category' , [TeacherController::class , 'assignmentTeacherToCategory']);
-    Route::get('categries-no-teachers' , [AdminstratorCategoryController::class , 'categoriesWihtNoTeacher']);
+    Route::get('categries-no-teacheruniversity_ids' , [AdminstratorCategoryController::class , 'categoriesWihtNoTeacher']);
     Route::group(['prefix' => 'students'] , function(){
-        Route::post('distribute' , [AdminStudentController::class , 'distributeCategories']);
+        Route::post('distribute' , [AdminStudentController::class , 'distribut\eCategories']);
     });
 });
     
@@ -70,6 +74,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('/' , [ProblemController::class, 'store']);
         Route::delete('/{problem}' , [ProblemController::class , 'delete']);
         Route::get('/' , [ProblemController::class , 'index']);
+        Route::post('fillter' , [StudentProblemController::class , 'filter']);
         Route::get('/bank' , [ProblemController::class , 'showBank']);
         Route::get('/active/{problem}' , [ProblemController::class , 'activate']);
         Route::get('my-problems' , [ProblemController::class , 'myProblems']);
@@ -92,8 +97,9 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     Route::group(['prefix' => 'assessment'] , function(){
         Route::get('/{category}' ,[ AssessmentController::class , 'index']) ;
         Route::post('/create' , [AssessmentController::class, 'store']);
-        Route::get('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
+        Route::post('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
         Route::post('/check-attendance/{assessment}' , [AssessmentController::class , 'checkStudents']);
+        Route::delete('/{assessment}' , [AssessmentController::class , 'delete']) ;
     });
 });
 //kassem
@@ -106,10 +112,17 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::get('/test-cases/{solve}' ,[StudentProblemController::class , 'testCases']);
         Route::get('/solves/{problem}' , [StudentProblemController::class , 'solves']);
     });
+    Route::group(['prefix' => 'profile'] , function(){
+        Route::get('/' , [ProfileController::class , 'show']);
+        
+    });
     Route::group(['prefix' => 'contests'] , function(){
+        Route::get('/', [ContestController::class, 'myContests']);
         Route::post('create' , [ContestController::class , 'create']);
         Route::post('{contest}/solve/{problem}' , [ContestController::class , 'solve']);
         Route::post('join/{contest}' , [ContestController::class , 'join']);
+        
+        Route::get('/{contest}' , [ContestController::class , 'show']) ;
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [StudentCategoryController::class , 'myCategories']);

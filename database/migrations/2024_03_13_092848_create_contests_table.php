@@ -12,6 +12,7 @@ class CreateContestsTable extends Migration
             $table->id();
             $table->string('name');
             $table->time('duration');
+            $table->text('description')->nullable() ;
             $table->timestamp('start_at');
             $table->integer('scoure')->default(0);
             $table->string('password')->nullable();

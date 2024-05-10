@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AssessmentStudentsResource;
 use App\Models\Assessment;
 use App\Models\Category;
+use App\Models\CategoryStudent;
 use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ class AssessmentController extends Controller
                 'problem_id' => $assessment->problem_id ,
                 'id' => $assessment->id ,
                 'name' => $assessment->name ,
+                'date' =>  $assessment->created_at ,
             ];
         });
     }
@@ -36,27 +38,52 @@ class AssessmentController extends Controller
         ];
 
     }
-    public function stopAssessment(Assessment $assessment) {
-        $assessment->active = 0 ; 
-        $assessment->problem->in_bank = 0;
-         $category = $assessment->category ;
-        foreach($assessment->students as $student){
-             $student->categories()->updateExistingPivot($category->id, [
-        'assessment_marks' => $assessmentMarks,
-        'attendance_marks' => \DB::raw('attendance_marks + 1')
-    ]);
-        }
-    }
-    public function checkStudents(Assessment $assessment , Request $request ) {
+    public function stopAssessment(Assessment $assessment , Request $request ) {
         $request->validate([
             'students' => 'required|array'
         ]);
+        $this->checkPermission($assessment) ;
+        // return $request ;
+        $category = $assessment->category ;
+        $assessment->active = 0 ; 
+        $assessment->problem->in_bank = 0;
+        $category = $assessment->category ;
+        foreach($request->students as $student){
+            $cat_stu = CategoryStudent::where('student_id' , $student['id'])
+                ->where('category_id' , $category->id)
+                ->first();
+            if ($student['mark']!=0)
+            // return $cat_stu ;
+                $cat_stu->assessment_marks = ($cat_stu->assessment_marks + $student['mark'])/($cat_stu->number_of_assessment+1) ;
+            $cat_stu->number_of_assessment = $cat_stu->number_of_assessment + 1 ;
+            $cat_stu->attendance_marks ++;
+            $cat_stu->save();
+        }
+        return ['mesage' => 'assessment finishing successfully'] ;
+    }
+    public function checkStudents(Assessment $assessment , Request $request ) {
+        $this->checkPermission($assessment) ;
+        $request->validate([
+            'students' => 'required|array'
+        ]   );
+        $assessment->active = 1 ;
+        $assessment->save() ;
         foreach($request->students as $student){
             $assessment->students()->attach($student) ;
         }
         return AssessmentStudentsResource::collection($assessment->students()->get());
     }
-    
+    public function delete(Assessment $assessment){
+        $assessment->delete() ;
+        return response()->json([
+            'message' => 'deleted sucessfully'
+        ] ,200) ;
+    }
+
+    protected function checkPermission(Assessment $assessment){
+        if ($assessment->teacher_id != auth()->user()->teacher->id)
+            abort(403 , 'this assessment dont belongs to you') ;
+    }
     
     
 }

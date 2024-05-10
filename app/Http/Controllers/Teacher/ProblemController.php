@@ -76,8 +76,10 @@ class ProblemController extends Controller
         return $problem ;   
     }
     public function show(Problem $problem) {
+        
         $problem->tags;
         $problem->testCase ;
+        $problem['solve'] = $problem->teacher_code_solve ;
         return $problem ;
     }
     public function delete(Problem $problem){

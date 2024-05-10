@@ -54,13 +54,14 @@ class CategoryController extends Controller
     }
     public function updateCategory(Request $request,Category $category){
         $this->teacherAuth($category) ;
+        $request->except(['name' , 'teacher_id'  , 'subject_id' ,'id']);
+        
         $category->update($request->all());
         return $category ;
     }
 
     protected function teacherAuth( Category $category){
-        $teacher = $category->subjectTeacher()->first()->teacher;
-        
+        $teacher = $category->teacher;       
         if ($teacher->id != auth()->user()->teacher->id){
             abort(403 , 'this category does not belong to you') ;
         }

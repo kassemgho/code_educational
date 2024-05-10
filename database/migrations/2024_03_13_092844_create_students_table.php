@@ -10,11 +10,14 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->integer('hint_count')->default(2);
             $table->integer('points')->default(0);
-            $table->integer('reate')->default(0) ;
+            $table->integer('rate')->default(0) ;
             $table->date('date_of_birth')->nullable();
+            $table->integer('easy')->default(0);
+            $table->integer('medium')->default(0);
+            $table->integer('hard')->default(0);
             $table->integer('university_id')->nullable();
             $table->timestamps();
         });

@@ -13,10 +13,21 @@ class ProblemController extends Controller
 {
     public function problems(){
         $problems = Problem::with('tags')->get();
-        $problems = $problems->reverse(); 
+        // $problems = $problems->reverse();
+        $student_id = auth()->user()->student->id; 
+        $problems->map(function ($problem) use ($student_id) {
+            $solved = SolveProblem::where('student_id', $student_id)
+                ->where('problem_id' , $problem->id)
+                ->where('approved', true)
+                ->exists();
+            if ($solved){
+                $problem['status'] = 'accept' ;
+            }else 
+                $problem['status'] = ' ';
+        });
         return response()->json([
             'message' => 'done' ,
-            'data' => $problems 
+            'data' => $problems
         ],200) ;
     }
     public function solves($problem){
@@ -120,20 +131,31 @@ class ProblemController extends Controller
     }
     public function solve(Problem $problem , Request $request){
         $solve = $this->solveProlem($problem , $request) ;
+        $student = auth()->user()->student;
         if ($solve['approved'] == false){
             return response()->json([
                     'message' => $solve['message'],
                     'approved' => false 
             ],300);
         }else {
+            if ($problem->diffculty == 'easy') {
+                $student->easy++;
+            }
+            if ($problem->diffculty == 'medium') {
+                $student->medium++;
+            }
+            if ($problem->diffculty == 'hard') {
+                $student->hard++;
+            }
+            $student->rate+=$problem->level;
+            $student->save();
             return response()->json([
                 'message' => $solve['message'] ,
-                'approved' => true 
+                'approved' => true
             ],200);
         }
     }
     public function filter(Request $request){
-    
         $problems = Problem::query()->with('tags') ;
         
         if ($request->diffculty != null){
@@ -147,6 +169,9 @@ class ProblemController extends Controller
             if ($request->sort == 'AES')
                 $problems->orderBy('level' , 'asc');
             else $problems->orderBy('level' , 'desc');
+        }
+        if ($request->name != null){
+            $problems->where('name' ,'like', "%$request->name%");
         }
         }
         
