@@ -12,11 +12,19 @@ class TagController extends Controller
         $request->validate([
             'name' => 'required' 
         ]);
+        $tag = Tag::where('name' , $request->name)->first() ;
+        if ($tag!== null)
+        return response()->json([
+            'message' => 'this tag already exist' ,
+        ],409) ;
         Tag::create([
             'name' => $request->name
         ]);
         return response()->json([
             'message' => 'tag added succfully'
         ]);
+    }
+    public function tags(){
+        return Tag::all() ;
     }
 }

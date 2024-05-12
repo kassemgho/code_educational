@@ -14,6 +14,7 @@ class CreateCategoryStudentTable extends Migration
             $table->integer('mark')->nullable();
             $table->float('attendance_marks')->nullable();
             $table->float('assessment_marks')->nullable();
+            $table->integer('presence')->default(0);
             $table->integer('number_of_assessment')->nullable();
             $table->timestamps();
         });

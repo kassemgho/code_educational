@@ -17,9 +17,10 @@ class CategoryStudentResource extends JsonResource
         return [
             'student_id' => $this->id,
             'student_name' => $this->user->name,
-            'attendance_marks' => $this->pivot->attendance_marks,
-            'assessment_marks' => $this->pivot->assessment_marks,
-            'mark' => (count($this->exams) == 0) ? 0  : $this->exams[0]->pivot->mark ,
+            'presence' => $this->pivot->presence ,
+            'exam_mark' =>(count($this->exams) == 0) ? 0  : $this->exams[0]->pivot->mark ,
+            'tests' => $this->pivot->number_of_assessment,
+            'total_mark' => $this->pivot->mark ,
             'exam_id' => (count($this->exams) == 0) ? 0 : $this->exams[0]->id 
             
         ];

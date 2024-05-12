@@ -18,12 +18,13 @@ class ProblemResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->name,
-            'tags' => $this->tags,
+            // 'tags' => $this->tags,
             'diffculty' => $this->diffculty ,
-            'active' => $this->active,
-            'test_case' => $this->testCase ,
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->updated_at->format('Y-m-d'),
+            // 'active' => $this->active,
+            // 'test_case' => $this->testCase ,
+            // 'created_at' => $this->created_at->format('Y-m-d'),
+            // 'updated_at' => $this->updated_at->format('Y-m-d'),
+            'solutions' => $this->solutions
         ];
     }
 }

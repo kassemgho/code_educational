@@ -14,8 +14,10 @@ class MarkController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
         $category = Category::find($request->category_id);
-        $exam_mark = $category->subjectTeacher->subject->exam_mark;
-        $total_mark  = $category->subjectTeacher->subject->total_mark;
+        if ($category->teacher_id != auth()->user()->teacher->id)
+        abort(403 , 'this category dont belon to you ');
+        $exam_mark = $category->subject->exam_mark;
+        $total_mark  = $category->subject->total_mark;
         $category->mark_of_commings = $request->attendance_mark;
         $category->mark_of_ratings = $total_mark - $category->mark_of_commings - $exam_mark ;
         $category->save();

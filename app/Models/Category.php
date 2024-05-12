@@ -22,7 +22,7 @@ class Category extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class, 'category_student')
-            ->withPivot('attendance_marks','assessment_marks','number_of_assessment');
+            ->withPivot('attendance_marks','assessment_marks','number_of_assessment','mark','presence');
     }
     public function subjectTeacher()
     {

@@ -78,6 +78,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::get('/bank' , [ProblemController::class , 'showBank']);
         Route::get('/active/{problem}' , [ProblemController::class , 'activate']);
         Route::get('my-problems' , [ProblemController::class , 'myProblems']);
+        Route::get('tags' , [TagController::class , 'tags']);
         Route::get('/{problem}', [ProblemController::class, 'show']);
         Route::post('add-tag' , [TagController::class , 'addTag']);
         Route::post('generate-test-cases' , [ProblemController::class , 'generateTestCases']);
@@ -86,7 +87,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::get('/min' , [CategoryController::class, 'index']);
         Route::get('/{category}/students' , [CategoryController::class , 'showCategoryStudent']);
         Route::post('/add-marks' , [MarkController::class , 'addMarks']);
-        Route::post('/attendance',[CategoryController::class , 'checkStudents']);
+        Route::post('{category}/attendance/',[CategoryController::class , 'checkStudents']);
         Route::post('/{category}' , [CategoryController::class , 'updateCategory']);
     });
 
@@ -111,7 +112,7 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::get('{problem}' , [StudentProblemController::class , 'show']);
         Route::get('/test-cases/{solve}' ,[StudentProblemController::class , 'testCases']);
         Route::get('/solves/{problem}' , [StudentProblemController::class , 'solves']);
-        Route::get('/solution/{id}' , [StudentProblemController::class , ''])
+        // Route::get('/solution/{id}' , [StudentProblemController::class , ''])
     });
     Route::group(['prefix' => 'profile'] , function(){
         Route::get('/' , [ProfileController::class , 'show']);
@@ -138,3 +139,8 @@ Route::post('run' , function(Request $request){
     $param['code'] = $request->code ;
     return CodeExecutorController::runCPPCode($param);
 });
+
+
+
+//toker   
+//  5|qTNH44fjNepK8vNKiCywtkpedjmVbsLKckwKLdTp2cf119fb

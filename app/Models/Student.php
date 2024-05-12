@@ -30,7 +30,7 @@ class Student extends Model
         public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_student')
-           ->withPivot('attendance_marks','assessment_marks','number_of_assessment', 'mark');
+           ->withPivot('attendance_marks','assessment_marks','number_of_assessment', 'mark' , 'presence');
     }
 
     public function contests(): BelongsToMany

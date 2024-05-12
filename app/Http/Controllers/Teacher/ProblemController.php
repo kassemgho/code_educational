@@ -6,6 +6,7 @@ use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
+use App\Models\Tag;
 use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class ProblemController extends Controller
     
  
     public function index(){
-        return ProblemResource::collection(Problem::where('active' , 1)->get());
+        return ProblemResource::collection(Problem::where('active' , 0)->get());
     }
     public function showBank(){
         $problems = auth()->user()->teacher->problems()->where('active' , 0)->get() ;
@@ -74,6 +75,7 @@ class ProblemController extends Controller
         $problem->time_limit_ms = $maxTim + 0.2 ;
         $problem->save() ;
         $problem->testCases ;
+        $problem['code']= $problem->teacher_code_solve ;    
         return $problem ;   
     }
     public function show(Problem $problem) {
@@ -119,4 +121,5 @@ class ProblemController extends Controller
         }
         return $res ;
     }
+  
 }

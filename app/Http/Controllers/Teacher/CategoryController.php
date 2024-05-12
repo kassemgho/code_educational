@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\Subject;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
@@ -22,42 +23,43 @@ class CategoryController extends Controller
     }
     
     public function showCategoryStudent(Category $category){
-        // $this->teacherAuth($category) ;
-       
-        $students = $category->students()->with(['exams' => function ($query) use ($category) {
-            $query->where('subject_id', $category->subjectTeacher()->first()['subject_id']);
-        }])->get();
-        return CategoryStudentResource::collection($students);
+        $students = $category->students()->get() ;
+        // return $students ;
+        
+        return CategoryStudentResource::collection($students) ;
     }
     public function show(Category $category) {
         return $category;
     }
-    public function checkStudents(Request $request){
+    public function checkStudents(Request $request , Category $category){
         $request->validate([
             'students' => 'required|array',
-            'category_id' => 'required|integer' ,
         ]);
+        
+        DB::beginTransaction();
         // return $request ;
         foreach($request->students as $student){
             $studentCategoey = CategoryStudent::where('student_id' ,$student['id'] )
-                ->where('category_id' , $request->category_id)
+                ->where('category_id' , $category->id)
                 ->first() ;
-
-            $studentCategoey->attendance_marks++;
-            $studentCategoey->number_of_assessment++;
-            $studentCategoey->assessment_marks+=$student['mark'] ;
+            if ($studentCategoey == null)abort(404,'there is no stududent in this category');
+            $studentCategoey->presence++;
+            if($student['mark']!=-1)
+                $studentCategoey->number_of_assessment++;
+            if($student['mark']!=0)
+                $studentCategoey->assessment_marks+=$student['mark'] ;
             $studentCategoey->save() ;
         }
+        DB::commit();
         return response()->json([
             'message' => 'checked successfully'
         ] ,200) ;
     }
     public function updateCategory(Request $request,Category $category){
         $this->teacherAuth($category) ;
-        $request->except(['name' , 'teacher_id'  , 'subject_id' ,'id']);
-        
-        $category->update($request->all());
-        return $category ;
+        $request = $request->except(['name' , 'teacher_id'  , 'subject_id' ,'id']);
+        $category->update($request);
+        return new CategoryResource($category) ;
     }
 
     protected function teacherAuth( Category $category){
