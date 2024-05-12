@@ -6,6 +6,7 @@ use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProblemResource;
 use App\Models\Problem;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
 
 class ProblemController extends Controller
@@ -96,7 +97,7 @@ class ProblemController extends Controller
         if (auth()->user()->teacher->id != $problem->teacher_id){
             abort(403 , 'this problem dont belong to you' ) ;
         } 
-        $problem->in_bank = 0 ;
+        $problem->active = 1 ;
         $problem->save();
         return response()->json([
             'message' => 'activeted successfully'

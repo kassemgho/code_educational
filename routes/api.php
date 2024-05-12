@@ -111,6 +111,7 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::get('{problem}' , [StudentProblemController::class , 'show']);
         Route::get('/test-cases/{solve}' ,[StudentProblemController::class , 'testCases']);
         Route::get('/solves/{problem}' , [StudentProblemController::class , 'solves']);
+        Route::get('/solution/{id}' , [StudentProblemController::class , ''])
     });
     Route::group(['prefix' => 'profile'] , function(){
         Route::get('/' , [ProfileController::class , 'show']);
