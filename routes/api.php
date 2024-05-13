@@ -96,10 +96,10 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('/answers' , [ExamController::class, 'show']);
     });
     Route::group(['prefix' => 'assessment'] , function(){
+        Route::post('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
         Route::get('/{category}' ,[ AssessmentController::class , 'index']) ;
         Route::post('/create' , [AssessmentController::class, 'store']);
-        Route::post('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
-        Route::post('/check-attendance/{assessment}' , [AssessmentController::class , 'checkStudents']);
+        Route::post('/active/{assessment}' , [AssessmentController::class , 'active']);//when active should send the student 
         Route::delete('/{assessment}' , [AssessmentController::class , 'delete']) ;
     });
 });
@@ -110,9 +110,8 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::get('/' , [StudentProblemController::class , 'problems']);
         Route::post('fillter' , [StudentProblemController::class , 'filter']);
         Route::get('{problem}' , [StudentProblemController::class , 'show']);
-        Route::get('/test-cases/{solve}' ,[StudentProblemController::class , 'testCases']);
         Route::get('/solves/{problem}' , [StudentProblemController::class , 'solves']);
-        // Route::get('/solution/{id}' , [StudentProblemController::class , ''])
+        Route::get('/solution/{solve}' , [StudentProblemController::class , 'testCases']);
     });
     Route::group(['prefix' => 'profile'] , function(){
         Route::get('/' , [ProfileController::class , 'show']);
@@ -128,6 +127,7 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/' , [StudentCategoryController::class , 'myCategories']);
+        Route::post('change' , [StudentCategoryController::class , 'changeCategory']);
     });
 });
 
@@ -140,7 +140,15 @@ Route::post('run' , function(Request $request){
     return CodeExecutorController::runCPPCode($param);
 });
 
-
+Route::get('test' , function (){
+    return "hello" ;
+});
 
 //toker   
-//  5|qTNH44fjNepK8vNKiCywtkpedjmVbsLKckwKLdTp2cf119fb
+
+/**
+
+6|ZENSmmvH6skQUf1IMpvEmqOFSsJeMDPEYCR6zqbo49d6d749
+192.168.108.243
+
+ */

@@ -18,7 +18,7 @@ class CategoriesSubjectsResource extends JsonResource
             'class' => $this->id,
             'subject' => $this->subject->name,
             'number_of_students' => count($this->students),
-            'teacher_name' => $this->teacher->user->name
+            'teacher_name' => $this->teacher->user->name ?? NULL
         ]; 
     }
 }

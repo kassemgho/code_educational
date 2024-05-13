@@ -41,7 +41,7 @@ class ProblemController extends Controller
             }else $message = 'error' ;
             $data [] = [
                 'id' => $submistion->id ,
-                'naem' => 'solution ' . $submistion->id ,
+                'name' => 'solution ' . $submistion->id ,
                 'status' => $message ,
             ];
         }
@@ -51,8 +51,23 @@ class ProblemController extends Controller
         ],200);
     }
     public function testCases(SolveProblem $solve){
-        $solve->solveCases;  
-        return $solve;
+        // return $solve ;
+        $studentSolves = $solve->solveCases;
+        $teacherSolves = $solve->problem->testCases ;
+        $data = [] ;
+        $i = 0 ;
+        foreach($studentSolves as $studentSolve){
+            $data[$i]['input'] = $studentSolve['input'];
+            $data[$i]['output'] = $studentSolve['output'];
+            $data[$i]['answer'] = $teacherSolves[$i]['output'];
+            $i++;
+        }
+
+
+        return response()->json([ 
+            'data' => $data,
+            'message' => 'good' ,
+        ],201);
     }
     public function show(Problem $problem){
         $problem->testCase ;

@@ -25,7 +25,6 @@ class StudentController extends Controller
                 'student_name' => $request->student->user->name,
                 'old_class' => $request->old_category,
                 'new_class' => $request->new_category, 
-                'subject' => $request->subject->name,
             ];
         });
         return $data;

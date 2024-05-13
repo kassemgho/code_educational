@@ -17,6 +17,7 @@ class ExamController extends Controller
             ->where('exam_id' , $request->exam_id)
             ->first();
         // $solve['problem_1'] = $solve->exam->problem1->description ; 
+        // return $solve ;
         $answer = $solve->answers->map(function ($answer) {
             return [
                 'question_text' => $answer->trueFalseQuestion()->first()['question_text'],

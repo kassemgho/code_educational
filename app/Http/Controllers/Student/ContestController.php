@@ -23,7 +23,7 @@ class ContestController extends Controller
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'min_level' => 'required|integer|min:1|max:10',
             'max_level' => 'required|integer|min:0|max:10',
-            'students' => 'required|array' 
+            'students' => 'array' 
         ]);
         $scour = 0 ;
         $contest = $student->contests()->create($request->all());
@@ -36,11 +36,10 @@ class ContestController extends Controller
             $contest->problems()->attach($problem->id);
         }
         $contest->scoure = $scour ;
-    
-        foreach($request->students as $student_id){
-            if ($student_id !== $student->id)
-            $contest->students()->attach($student_id) ;
-        }
+        if ($request->students !== NULL)
+            foreach($request->students as $student_id)
+                if ($student_id !== $student->id)
+                   $contest->students()->attach($student_id) ;
         $contest->save() ;
         return response()->json([
             'message' => "contest will start at $request->start_at",

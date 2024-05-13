@@ -9,7 +9,7 @@ class ChangeCategoryRequest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'new_category' , 'old_catefory' , 'student_id' , 'reason' , 'subject_id'
+        'new_category' , 'old_category' , 'student_id' , 'reason' ,
     ];
     public function student()
     {

@@ -15,6 +15,7 @@ class ExamsSubjectsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id ,
             'subject' => $this->subject->name,
             'exam_date' => $this->time,  
         ];

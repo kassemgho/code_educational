@@ -25,7 +25,7 @@ class ExamSubjectResource extends JsonResource
                     'output' => $testCase->output
                 ];
             }),
-            'tags' => $this->problem1->tags,
+            'tags' => $this->problem1()->first()->tags,
             'teacher_solve_code' => $this->problem1->teacher_code_solve,
             'questions' => $this->trueFalseQuestions,
         ];

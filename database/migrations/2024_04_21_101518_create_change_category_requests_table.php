@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('new_category');
             $table->integer('old_category');
-            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('reason')->nullable();
             $table->timestamps();

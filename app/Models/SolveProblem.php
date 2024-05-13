@@ -19,4 +19,9 @@ class SolveProblem extends Model
     public function finalCase(){
         return $this->hasone(SolveCases::class)->latestOfMany() ;
     }
+
+    public function problem()
+    {
+        return $this->belongsTo(Problem::class);
+    }
 }

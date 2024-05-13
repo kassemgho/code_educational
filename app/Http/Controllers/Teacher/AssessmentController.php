@@ -46,7 +46,7 @@ class AssessmentController extends Controller
         // return $request ;
         $category = $assessment->category ;
         $assessment->active = 0 ; 
-        $assessment->problem->in_bank = 0;
+        $assessment->problem->active = 1;
         $category = $assessment->category ;
         foreach($request->students as $student){
             $cat_stu = CategoryStudent::where('student_id' , $student['id'])
@@ -61,11 +61,11 @@ class AssessmentController extends Controller
         }
         return ['mesage' => 'assessment finishing successfully'] ;
     }
-    public function checkStudents(Assessment $assessment , Request $request ) {
+    public function active(Assessment $assessment , Request $request ) {
         $this->checkPermission($assessment) ;
         $request->validate([
             'students' => 'required|array'
-        ]   );
+        ]);
         $assessment->active = 1 ;
         $assessment->save() ;
         foreach($request->students as $student){
