@@ -17,7 +17,8 @@ class AssessmentStudentsResource extends JsonResource
         return [
             'id' => $this->id ,
             'name' => $this->user->name ,
-            'mark' =>$this->pivot->mark 
+            'mark' =>$this->pivot->mark ,
+
         ];
     }
 }

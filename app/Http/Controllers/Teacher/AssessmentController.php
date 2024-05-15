@@ -71,7 +71,18 @@ class AssessmentController extends Controller
         foreach($request->students as $student){
             $assessment->students()->attach($student) ;
         }
-        return AssessmentStudentsResource::collection($assessment->students()->get());
+        return [ 'message' => 'activeated successfully ']; 
+        //AssessmentStudentsResource::collection($assessment->students()->get());
+    }
+    public function details(Assessment $assessment){
+        $data['student'] =  AssessmentStudentsResource::collection($assessment->students()->get());
+        $problem = $assessment->problem ;
+        $problem->testCases;
+        $problem->tags ;
+        $problem['solve'] = $problem->teacher_code_solve ;
+        $data['problem'] = $problem ;
+        return $data ;
+
     }
     public function delete(Assessment $assessment){
         $assessment->delete() ;

@@ -71,10 +71,10 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     Route::post('add-tag' , [TagController::class , 'addTag']);
 
     Route::group(['prefix' => 'problems'] , function(){
+        Route::post('/fillter' , [StudentProblemController::class , 'filter']);
         Route::post('/' , [ProblemController::class, 'store']);
         Route::delete('/{problem}' , [ProblemController::class , 'delete']);
         Route::get('/' , [ProblemController::class , 'index']);
-        Route::post('fillter' , [StudentProblemController::class , 'filter']);
         Route::get('/bank' , [ProblemController::class , 'showBank']);
         Route::get('/active/{problem}' , [ProblemController::class , 'activate']);
         Route::get('my-problems' , [ProblemController::class , 'myProblems']);
@@ -101,6 +101,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('/create' , [AssessmentController::class, 'store']);
         Route::post('/active/{assessment}' , [AssessmentController::class , 'active']);//when active should send the student 
         Route::delete('/{assessment}' , [AssessmentController::class , 'delete']) ;
+        Route::get('details/{assessment}' , [AssessmentController::class, 'details']);
     });
 });
 //kassem
