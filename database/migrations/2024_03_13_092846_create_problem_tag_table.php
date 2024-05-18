@@ -12,6 +12,10 @@ class CreateProblemTagTable extends Migration
             $table->id();
             $table->foreignId('problem_id')->constrained()->onDelete('cascade');
             $table->foreignId('tag_id')->constrained()->onDelete('cascade');
+            $table->unique([
+                'problem_id',
+                'tag_id'
+            ]);
             $table->timestamps();
         });
     }

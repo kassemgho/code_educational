@@ -31,7 +31,7 @@ class CategoryController extends Controller
     public function show(Category $category) {
         return $category;
     }
-    public function checkStudents(Request $request , Category $category){
+    public function checkStudents( Category $category,Request $request ){
         $request->validate([
             'students' => 'required|array',
         ]);

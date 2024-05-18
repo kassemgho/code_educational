@@ -25,6 +25,7 @@ class TagController extends Controller
         ]);
     }
     public function tags(){
-        return Tag::all() ;
+         $tags = Tag::all() ;
+         return $tags ; 
     }
 }

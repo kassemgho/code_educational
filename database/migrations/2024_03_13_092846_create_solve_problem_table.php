@@ -13,10 +13,6 @@ class CreateSolveProblemTable extends Migration
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->text('student_code');
             $table->boolean('approved');
-            $table->unique([
-                'problem_id',
-                'student_id'
-            ]);
             $table->timestamps();
         });
     }
