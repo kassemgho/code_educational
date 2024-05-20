@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Contest extends Model
 {
     use HasFactory;
-    protected $fillable  = ['name' ,'duration','start_at' , 'password' , 'scoure' ] ;
+    protected $fillable  = ['name' ,'duration','start_at' , 'password' , 'scoure', 'contest_time'] ;
  
     public function problems(): BelongsToMany
     {
@@ -19,5 +19,8 @@ class Contest extends Model
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class)->withPivot('rank');
+    }
+    public function owner (){
+        return   $this->students()->first()->user->name; 
     }
 }

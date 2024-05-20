@@ -18,9 +18,9 @@ class ProblemResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->name,
-            // 'tags' => $this->tags,
+            'tags' => $this->tags[0],
             'diffculty' => $this->diffculty ,
-            // 'active' => $this->active,
+            'level' => $this->level,
             // 'test_case' => $this->testCase ,
             // 'created_at' => $this->created_at->format('Y-m-d'),
             // 'updated_at' => $this->updated_at->format('Y-m-d'),

@@ -55,13 +55,15 @@ class ProblemController extends Controller
         $studentSolves = $solve->solveCases;
         $teacherSolves = $solve->problem->testCases ;
         $data = [] ;
+        $data['solve'] = $solve->student_code ;
         $i = 0 ;
         foreach($studentSolves as $studentSolve){
-            $data[$i]['input'] = $studentSolve['input'];
-            $data[$i]['output'] = $studentSolve['output'];
-            $data[$i]['answer'] = $teacherSolves[$i]['output'];
+            $data['testCases'][$i]['input'] = $studentSolve['input'];
+            $data['testCases'][$i]['output'] = $studentSolve['output'];
+            $data['testCases'][$i]['answer'] = $teacherSolves[$i]['output'];
             $i++;
         }
+    
 
 
         return response()->json([ 

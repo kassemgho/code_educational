@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Exam;
 use App\Models\ExamStudent;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
-    public function show(Request $request){
+    public function showStudentSolve(Request $request){
         $request->validate([
             'student_id' => 'required|integer',
             'exam_id' => 'required|integer'
@@ -28,6 +30,7 @@ class ExamController extends Controller
         $solve['answers'] = $answer ;
         return $solve;
     }
+
     public function editMarkStudent(Request $request) {
         $request->validate([
             'exam_id' => 'required|integer' ,
@@ -42,6 +45,15 @@ class ExamController extends Controller
         return response()->json([
             'message' => 'updated successfully'
         ],200);
+    }
+    public function examInCategory(Subject $subject){
+        return $subject->exam ;
+    }
+    public function show(Exam $exam){
+        $exam->students ;
+        $exam->trueFalseQuestions ;
+        $exam->problem1 ;
+        return $exam ;
     }
     
 }

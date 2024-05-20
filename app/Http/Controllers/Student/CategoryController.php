@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategorySubjectResource;
 use App\Http\Resources\ExamsDisplay;
 use App\Models\Category;
@@ -11,13 +12,14 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function index(){
+        return CategoryResource::collection(Category::all());
+    }
     public function myCategories(){
         // $data = [];
         $categories = auth()->user()->student->categories; 
         $data['categories'] = CategorySubjectResource::collection($categories);
-        $exams = auth()->user()->student->exams()->where('time','>' ,now())
-        ->orderBy('time')
-        ->get() ;
+       
         return $data;
     }
     public function changeCategory(Request $request){
@@ -33,6 +35,13 @@ class CategoryController extends Controller
         return ['message' => 'added successfully'] ; 
 
     }
+    public function show (Category $category){
+        $data = [] ;
+        $data['teacher_name'] = $category->teacher->user->name ;
+        $data['subject'] = $category->subject->name ;
+        $data['assessments'] = $category->assessments ;
+        return $data ;
+   }
 
     
 }

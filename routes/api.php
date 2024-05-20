@@ -93,7 +93,8 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
 
     Route::group(['prefix' => 'exams'] , function(){
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
-        Route::post('/answers' , [ExamController::class, 'show']);
+        Route::post('/answers' , [ExamController::class, 'showStudentSolve']);
+        Route::get('show/{exam}' , [ExamController::class , ' show']);
     });
     Route::group(['prefix' => 'assessment'] , function(){
         Route::post('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
@@ -103,6 +104,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::delete('/{assessment}' , [AssessmentController::class , 'delete']) ;
         Route::get('details/{assessment}' , [AssessmentController::class, 'details']);
     });
+    Route::get('subjects' , [CategoryController::class , 'subjects']);
 });
 //kassem
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
@@ -127,8 +129,11 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::get('/{contest}' , [ContestController::class , 'show']) ;
     });
     Route::group(['prefix' => 'categories'] , function(){
+        Route::get('/all' , [StudentCategoryController::class ,  'index']) ;
         Route::get('/' , [StudentCategoryController::class , 'myCategories']);
         Route::post('change' , [StudentCategoryController::class , 'changeCategory']);
+        Route::get('/{category}' , [StudentCategoryController::class , 'show']);
+
     });
 });
 
@@ -151,5 +156,13 @@ Route::get('test' , function (){
 
 6|ZENSmmvH6skQUf1IMpvEmqOFSsJeMDPEYCR6zqbo49d6d749
 192.168.108.243
+
+ */
+
+ /*
+show subjects 
+show emax in subjects 
+show students with mark with solve in exam 
+edit mark 
 
  */

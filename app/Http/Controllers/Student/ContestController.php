@@ -13,14 +13,19 @@ class ContestController extends Controller
 {
     public function myContests() {
         $student = auth()->user()->student;
-        return $student->contests;
+        $contests = $student->contests->map(function($contest){
+            $contest['owner'] = $contest->owner() ;
+            return $contest ;
+        }) ;
+        
+        return $contests ;
     }
     public function create(Request $request){
         $student = auth()->user()->student ;
         $request->validate([
             'name' => 'required|string',
             'duration' => 'integer',
-            'start_at' => 'required|date_format:Y-m-d H:i:s',
+            'start_at' => 'required|date_format:Y-m-d',
             'min_level' => 'required|integer|min:1|max:10',
             'max_level' => 'required|integer|min:0|max:10',
             'students' => 'array' 

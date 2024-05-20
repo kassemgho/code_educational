@@ -16,6 +16,7 @@ class CategorySubjectResource extends JsonResource
     {
         $name_parts = explode("_", $this->name);
         return [
+            'id' => $this->id ,
             'name' => $name_parts[0], 
             'class' =>   $name_parts[1]
         ];

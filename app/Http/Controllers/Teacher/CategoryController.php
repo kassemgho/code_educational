@@ -68,6 +68,16 @@ class CategoryController extends Controller
             abort(403 , 'this category does not belong to you') ;
         }
     }
+    public function subjects (){
+        
+        $teacher = auth()->user()->teacher ;
+        
+        // return $teacher->categories ;
+        $subjects = $teacher->categories->map(function($category){
+            return $category->subject ;
+        })->unique();
+        return $subjects ;
+    }
 
     
     

@@ -13,7 +13,8 @@ class CreateContestsTable extends Migration
             $table->string('name');
             $table->integer('duration')->default(2);
             $table->text('description')->nullable() ;
-            $table->timestamp('start_at');
+            $table->date('start_at')->default('2024-06-01');
+            $table->time('contest_time')->default('09:00:00');
             $table->integer('scoure')->default(0);
             $table->string('password')->nullable();
             $table->timestamps();
